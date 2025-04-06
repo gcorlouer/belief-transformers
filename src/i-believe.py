@@ -8,7 +8,9 @@ from transformer_lens import HookedTransformer, HookedTransformerConfig
 from tqdm.notebook import tqdm
 #TODO: 
 # -check correctness of generated process
-# -check stationary distribution is correct 
+# -check stationary distribution is correct
+# -maybe need to renormalize probabilities (belief states and from transition matrices)
+# -Include type of variables 
 
 # Set random seeds for reproducibility
 torch.manual_seed(42)
@@ -40,6 +42,7 @@ class Mess3Process():
         # Token map
         self.tokens = ['A', 'B', 'C']
         self.states = [0, 1, 2]
+        self.token_idx = {token: idx for idx, token in enumerate(self.tokens)}
 
     def stationary_distribution(self):
         # Compute the stationary distribution of the Markov chain
@@ -64,6 +67,18 @@ class Mess3Process():
             current_state = next_state
         return tok_sequence
 
+    def get_belief_states(self, sequence):
+        belief_states = []
+        belief_state = self.stationary_distribution()
+        for token in sequence:
+            token_idx = self.token_idx[token]
+            belief_state = torch.einsum('i,ij->j', belief_state, self.T[token_idx, :, :])
+            belief_state = belief_state / belief_state.sum()
+            belief_states.append(belief_state)
+        return belief_states
+    
+def plot_belief_states(belief_states):
+    
 
 if __name__ == "__main__":
     mess3 = Mess3Process()
