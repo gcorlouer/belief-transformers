@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["src"]
+
+[project]
+name = "belief-transformers"
+version = "0.1"
+description = "Finding belief states in transformers"
+dependencies = [
+    "torch",
+    "numpy",
+    "pandas",
+    "seaborn",
+    "matplotlib",
+    "wandb",
+    "scikit-learn",
+    "plotly",
+    "transformer_lens",
+    "pytest",
+    "PyDrive",
+    "black",
+    "mypy",
+    "jaxtyping",
+    "fire",
+    "pydantic",
+    "wandb",
+    "python-dotenv",
+    "tqdm",
+    "boto3"
+]
